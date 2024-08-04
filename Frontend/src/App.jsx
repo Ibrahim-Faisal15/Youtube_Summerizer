@@ -3,21 +3,33 @@ import React, { useState } from "react";
 function App() {
   let [inputData, setInputData] = useState("");
 
-  let fetching = async (win) => {
+  let fetching = (win) => {
     win.preventDefault();
 
 
-    let get_link = await fetch(inputData)
-    let response = await get_link.response
-    console.log(response)
+    fetch("http://127.0.0.1:3000/genSummary", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(inputData),
+    })
+      .then((repsonse) => {
+        if (!repsonse.ok) {
+          throw new Error("There was a network issue, please try again")
+        }
+        return repsonse.json()
+      })
+      .then(
+        (jsonResponse) => {
+          console.log(jsonResponse)
+        }
+      )
+      .catch(error => {
+        console.error('Error:', error);
+      });
 
-    //   fetch("http://127.0.0.1:3000/genSummary", {
-    //     method: "POST",
-    //     headers: { "Content-Type": "application/json" },
-    //     body: JSON.stringify(inputData),
-    //   });
-    // };
-    // console.log(inputData)
+
+
+
   }
 
   return (

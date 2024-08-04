@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -8,7 +8,7 @@ CORS(app)
 def Index():
   data = request.get_json()
   print(data)
-  return "hello"
+  return jsonify(data)
 
 
 if __name__ == "__main__":
