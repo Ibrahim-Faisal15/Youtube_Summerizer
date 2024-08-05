@@ -8,8 +8,8 @@ load_dotenv()
 
 def gen_text(trans_scirpt, user_instructions=""):
   chat_model = ChatGroq(
-    temperature=2,
-    model="llama3-70b-8192",
+    temperature=0,
+    model="llama-3.1-70b-versatile",
     api_key=os.getenv("API_KEY")
 
 
@@ -23,7 +23,25 @@ def gen_text(trans_scirpt, user_instructions=""):
 
 
   chat_prompt = ChatPromptTemplate.from_messages([
-    ("system",  "Your are a video summrizer AI, whose job  will be to summerize the provided transcript into a complete summary based on user instructions. (Additional Cases: If the transcript is  different then Enlish language, translate it into English. Explain each timestamp like [timestamp : summaray (convert each timestamp into minutes like in a video)] and also add a conclusion at the end after done explaining each timestamp. "),
+    ("system",  """
+        PROMPT = You will be given an array of objects where each object contains text, start, durations of the transcript. Your job will be to take this array of objects as an input, summarize them in the following pattern:
+
+        <b>Following is the complete summary of the input video.</b>
+        [0:00] explain the sentence associated with this duration
+        .
+        .
+        .
+        etc....
+
+        <b>Conclusion</b>
+        Conclusion of the Transcript............
+
+        Note: convert the time into video time like hours:minutes:seconds
+        Note: Put '##' after completing explaining each transcript. DONT MISS THIS STEP
+        Note: Be sure to use html tags for formatting....
+        Note: Start with this pattern and don't write starting sentance.
+    
+        """),
     ("system", "Please summarize {video}."),
     ("human", human_prompt)
   ])

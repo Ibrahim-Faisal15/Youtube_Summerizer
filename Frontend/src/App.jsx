@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 function App() {
   let [inputData, setInputData] = useState("");
+  let [ResponseData, setResponseData] = useState([]);
 
   let fetching = (win) => {
     win.preventDefault();
@@ -20,16 +21,17 @@ function App() {
       })
       .then(
         (jsonResponse) => {
-          console.log(jsonResponse)
+          let array = jsonResponse.split('##')
+
+          setResponseData(array)
+          console.log(ResponseData)
+
+
         }
       )
       .catch(error => {
         console.error('Error:', error);
       });
-
-
-
-
   }
 
   return (
@@ -41,11 +43,16 @@ function App() {
           value={inputData}
           onChange={(e) => {
             setInputData(e.target.value);
-
           }}
         />
         <button>Submit</button>
       </form>
+
+      <div className="response">
+        {ResponseData.map((item, index) => (
+          <div key={index}>{item}</div>
+        ))}
+      </div>
     </>
   );
 }
